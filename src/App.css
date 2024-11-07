@@ -1,0 +1,143 @@
+*{
+	box-sizing: border-box;
+	--bs-gutter-x: 0rem !important;
+}
+
+body {
+    background-color: #0a0a0a;
+    color: white;
+}
+
+.login-form {
+    background-color: #191919;
+    color: white;
+    border: none;
+    box-shadow: #101010 0px 5px 10px;
+    padding: 20px 40px 20px 40px;
+}
+
+.login-form input,
+.login-form label {
+    margin: 5px;
+}
+
+.login-button-container,
+.new-checklist-button-container {
+    text-align: center;
+    margin: 20px 0px 0px 0px;
+}
+
+.login-button,
+.new-checklist-button {
+    background-color: #191919;
+    color: #1b9a3f;
+    border: 2px solid #1b9a3f;
+    border-radius: 10px;
+    padding: 2px 7px 2px 7px;
+}
+
+.login-button:hover,
+.new-checklist-button:hover {
+    background-color: #1b9a3f;
+    color: #191919;
+}
+
+.accordion-header {
+    border-radius: 20px;
+}
+
+.accordion-item.no-border.collapse-item {
+    border: 0px;
+    border-radius: 20px;
+}
+
+.accordion-header,
+.accordion-button.btn.btn-link{
+    background-color: #101010;
+    color: white;
+    padding: 20px;
+    box-shadow: none;
+}
+
+.accordion-item {
+    background-color: #101010;
+    color: white;
+}
+
+.accordion-button {
+    text-decoration: none;
+    color: white !important;
+}
+
+.accordion-item .progress {
+    background-color: #31313a;
+    height: 4px;
+    margin: 0px 20px 0px 20px;
+}
+
+.accordion-item .progress-bar {
+    background-color: #e9781a;
+}
+
+.accordion-item .progress-bar.completed {
+    background-color: #1b9a3f;
+}
+
+.list-group-item {
+    background-color: #111111;
+    color: white;
+    border: none;
+}
+
+.list-group {
+    border: 1px solid #191919;
+}
+
+.form-check-input:checked {
+    background-color: #1b9a3f;
+    border: none;
+}
+
+.save-button-container {
+    text-align: center;
+}
+
+.save-button {
+    background-color: #191919;
+    color: #1b9a3f;
+    border: 2px solid #1b9a3f;
+    border-radius: 10px;
+    padding: 2px 7px 2px 7px;
+}
+
+.save-button:hover {
+    background-color: #1b9a3f;
+    color: #191919;
+}
+
+.checklist-name {
+    width: 100%;
+}
+
+.checklist-status {
+    text-align: right;
+    width: 100%;
+}
+
+.checklist-status-label.in-progress {
+    background-color: #1b190c;
+    color: #c2612e;
+    border: 1px solid #c2612e;
+    border-radius: 7px;
+    padding: 2px 7px 2px 7px;
+    font-size: 75%;
+}
+
+.checklist-status-label.completed {
+    background-color: #191919;
+    color: #1b9a3f;
+    border: 2px solid #1b9a3f;
+    border-radius: 7px;
+    padding: 2px 7px 2px 7px;
+    font-size: 75%;
+}
