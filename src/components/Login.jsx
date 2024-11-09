@@ -21,12 +21,17 @@ const Login = () => {
             headers: { 'Content-Type' : 'application/json' }
            }).then((response) => {
             window.sessionStorage.setItem("token", response.data.token);
+            window.sessionStorage.setItem("role", response.data.role);
             setButtonDisabled(false);
-            navigate("/")
+            navigate("/");
            }).catch((error) => {
             console.error(error);
             setButtonDisabled(false);
            });
+    }
+
+    if (buttonDisabled) {
+        return "Logging in...";
     }
 
     return(

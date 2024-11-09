@@ -9,23 +9,23 @@ const ListChecklists = () => {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(false);
     const [dataReceived, setDataReceived] = useState(false);
-    if(token == null) {
-        navigate("/login");
-    }
 
     useEffect(() => {
-         const apiUrl = "https://sick-sibby-sera-ch-dc6b17e3.koyeb.app/api/checklists";
-         setLoading(true);
-         axios.get(apiUrl)
-             .then((response) => {
-                 setData(response.data);
-                 setDataReceived(true);
-                 setLoading(false);
-             })
-             .catch((error) => {
-                console.error(error);
-                setLoading(false);
-             });
+        if (token == null) {
+            navigate("/login");
+        }
+        const apiUrl = "https://sick-sibby-sera-ch-dc6b17e3.koyeb.app/api/checklists";
+        setLoading(true);
+        axios.get(apiUrl)
+         .then((response) => {
+             setData(response.data);
+             setDataReceived(true);
+             setLoading(false);
+         })
+         .catch((error) => {
+            console.error(error);
+            setLoading(false);
+         });
       }, []);
 
     if(loading) {
@@ -36,15 +36,11 @@ const ListChecklists = () => {
         if (!dataReceived) {
             return "No data";
         }
-        return data.checklists.map((checklist, index) => (
-            <div key={index}>
+        return data.checklists.map((checklist) => (
+            <div key = {"checklist-" + checklist.id}>
                 <Checklist data={checklist} />
             </div>
         ));
-    }
-
-    const onButtonClick = (event) => {
-//         TODO: Use modal to create new checklist
     }
 
     return (
@@ -54,9 +50,6 @@ const ListChecklists = () => {
                 </div>
                 <div className="col-12 col-md-4">
                     {Checklists(data)}
-                    <div className="new-checklist-button-container">
-                        <button className="btn new-checklist-button" id="new-checklist-button" onClick={event => onButtonClick(event)}>Add</button>
-                    </div>
                 </div>
                 <div className="col-4 d-none d-md-block">
                 </div>

@@ -28,7 +28,8 @@ body {
 }
 
 .login-button,
-.new-checklist-button {
+.new-checklist-button,
+.btn-primary{
     background-color: #191919;
     color: #1b9a3f;
     border: 2px solid #1b9a3f;
@@ -36,10 +37,28 @@ body {
     padding: 2px 7px 2px 7px;
 }
 
+.btn-secondary{
+    background-color: #111111;
+    color: #white;
+    border: 2px solid white;
+    border-radius: 10px;
+    padding: 2px 7px 2px 7px;
+}
+
 .login-button:hover,
-.new-checklist-button:hover {
+.new-checklist-button:hover,
+.btn-primary:hover{
     background-color: #1b9a3f;
     color: #191919;
+}
+
+.btn-secondary:hover{
+    background-color: white;
+    color: #111111;
+}
+
+.accordion {
+    margin: 10px;
 }
 
 .accordion-header {
@@ -67,6 +86,7 @@ body {
 .accordion-button {
     text-decoration: none;
     color: white !important;
+    display: block;
 }
 
 .accordion-item .progress {
@@ -124,20 +144,43 @@ body {
     width: 100%;
 }
 
+.checklist-status-label {
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+}
+
 .checklist-status-label.in-progress {
     background-color: #1b190c;
-    color: #c2612e;
-    border: 1px solid #c2612e;
-    border-radius: 7px;
-    padding: 2px 7px 2px 7px;
-    font-size: 75%;
+    border: 3px solid #c2612e;
+    border-radius: 50%;
+    font-size: 150%;
 }
 
 .checklist-status-label.completed {
-    background-color: #191919;
+    background-color: #1b9a3f;
+    border: 3px solid #1b9a3f;
+    border-radius: 50%;
+    color: #101012;
+    font-size: 150%;
+}
+
+.checklist-status-label.completed i {
+    position: relative;
+    top: -9px;
+    left: -3px;
+}
+
+.modal-content {
+    background-color: #111111;
+}
+
+.modal-header,
+.modal-body,
+.modal-footer {
+    border: none;
+}
+
+.task-name.checked {
     color: #1b9a3f;
-    border: 2px solid #1b9a3f;
-    border-radius: 7px;
-    padding: 2px 7px 2px 7px;
-    font-size: 75%;
 }
