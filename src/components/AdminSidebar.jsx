@@ -5,36 +5,44 @@ export default class AdminSidebar extends Component {
         super(props);
         this.state = {
             sendContent: props.sendContent,
+            username: props.username,
         };
     }
 
     render() {
         return (
-            <>
-                <div className={"sidebar col-2"}>
+            <div className={"sidebar col-2"}>
+                <div>
+                    <div className="sidebar-title">
+                        <h4 className={"d-none d-md-block"}>
+                            {this.state.username || ""}
+                        </h4>
+                        <h4 className={"admin-icon d-block d-md-none"}>
+                            <i className="bi bi-person-circle"></i>
+                        </h4>
+                    </div>
                     <div>
-                        <div className="sidebar-title">
-                            <h4>
-                                Admin
-                            </h4>
-                        </div>
-                        <div>
-                        <a href="" onClick={(e) => this.state.sendContent(e, 1)}>
-                            <div className = "sidebar-option row">
-                                <i className="bi bi-card-checklist col-3"></i>
+                    <a href="" onClick={(e) => this.state.sendContent(e, 1)}>
+                            <div className="sidebar-option row">
+                                <i className="bi bi-calendar-check col-3"></i>
                                 <h5 className="d-none d-md-block col-9">Checklists</h5>
                             </div>
                         </a>
                         <a href="" onClick={(e) => this.state.sendContent(e, 2)}>
                             <div className="sidebar-option row">
+                                <i className="bi bi-card-checklist col-3"></i>
+                                <h5 className="d-none d-md-block col-9">Tasks</h5>
+                            </div>
+                        </a>
+                        <a href="" onClick={(e) => this.state.sendContent(e, 3)}>
+                            <div className="sidebar-option row">
                                 <i className="bi bi-people col-3"></i>
                                 <h5 className="d-none d-md-block col-9">Users</h5>
                             </div>
                         </a>
-                        </div>
                     </div>
                 </div>
-            </>
+            </div>
         )
     }
 }

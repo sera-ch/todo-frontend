@@ -8,7 +8,10 @@ body {
     color: white;
 }
 
-a {
+a,
+a:hover,
+button.btn,
+button.btn:hover{
     text-decoration: none;
 }
 
@@ -18,6 +21,32 @@ a {
     border: none;
     box-shadow: #101010 0px 5px 10px;
     padding: 20px 40px 20px 40px;
+}
+
+.loading-bg {
+    background-color: #0a0a0a;
+    color: white;
+    width: 100%;
+    height: 100%;
+    position: fixed;
+}
+
+.loading-icon {
+    text-align: center;
+    width: 100%;
+    height: 100%;
+}
+
+.loading-icon .rli-d-i-b.OP-annulus-sector-track-indicator {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    translate: -50% -50%;
+    font-size: 150%;
+}
+
+.rli-d-i-b.rli-text-format.OP-annulus-sector-text {
+    font-size: 50%;
 }
 
 .login-form input,
@@ -43,7 +72,7 @@ a {
 
 .btn-secondary{
     background-color: #111111;
-    color: #white;
+    color: white;
     border: 2px solid white;
     border-radius: 10px;
     padding: 2px 7px 2px 7px;
@@ -113,6 +142,11 @@ a {
     border: none;
 }
 
+.accordion-body {
+    overflow-y: scroll;
+    max-height: 500px;
+}
+
 .list-group {
     border: 1px solid #191919;
 }
@@ -178,11 +212,27 @@ a {
 
 .sidebar {
     background-color: #323234;
-    position: absolute;
+    position: fixed;
     height: 100%;
+    padding: 0;
+}
+
+.edit-modal-bg {
+    background-color: #0a0a0a;
+    opacity: 90%;
+}
+
+.edit-modal {
+    background-color: #323234;
+    border: none;
+}
+
+.modal-content {
+    border-radius: 50%;
 }
 
 .manage-checklists,
+.manage-tasks,
 .manage-users {
     padding: 20px;
 }
@@ -200,4 +250,112 @@ a {
 
 .sidebar-option:hover {
     background-color: #0a0a0a;
+}
+
+.checklist-table i,
+.add-task-btn {
+    color: white;
+}
+
+.checklist-table.row:hover {
+    background-color: #31313a;
+}
+
+.checklist-item,
+.tasklist-item {
+    padding: 20px;
+}
+
+.task-table,
+.checklists-table {
+    overflow: auto;
+    max-height: 500px;
+}
+
+.task-table {
+    padding-left: 200px;
+}
+
+.add-new-task-input,
+.add-new-checklist-input {
+    width: 100%;
+}
+
+.add-new-task-button,
+.add-new-checklist-button {
+    margin: -10px 0px 0px -10px;
+}
+
+.task-category,
+.checklist-category,
+.user-role-label {
+    text-align: center;
+}
+
+.checklist-category-label {
+    padding: 4px 10px 4px 10px;
+    border-radius: 10px;
+    font-size: 80%;
+    &.label-trip {
+        background-color: #002f0c;
+        color: #26ab00;
+        border: 1px solid #26ab00;
+    }
+    &.label-hospital {
+        background-color: #450000;
+        color: #e30000;
+        border: 1px solid #e30000;
+    }
+}
+
+.task-category-label {
+    padding: 4px 10px 4px 10px;
+    border-radius: 10px;
+    font-size: 80%;
+    &.label-work {
+        background-color: #451900;
+        color: #ff5e00;
+        border: 1px solid #ff5e00;
+    }
+    &.label-entertainment {
+        background-color: #002629;
+        color: #00eeff;
+        border: 1px solid #00eeff;
+    }
+    &.label-medicine {
+        background-color: #450022;
+        color: #e30071;
+        border: 1px solid #e30071;
+    }
+}
+
+.user-role {
+    padding: 4px 10px 4px 10px;
+    border-radius: 10px;
+    font-size: 80%;
+
+    &.user-role-admin {
+        background-color: #451900;
+        color: #ff5e00;
+        border: 1px solid #ff5e00;
+    }
+
+    &.user-role-user {
+        background-color: #001c45;
+        color: #0072e3;
+        border: 1px solid #0072e3;
+    }
+}
+
+.edit-link i {
+    padding: 0 10px 0 10px;
+}
+
+.admin-icon {
+    text-align: center;
+}
+
+.admin-icon i{
+    font-size: 200%;
+    color: white;
 }

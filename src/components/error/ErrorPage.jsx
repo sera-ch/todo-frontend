@@ -4,7 +4,7 @@ import errorImage from '../../assets/error.png';
 export default class ErrorPage extends Component {
     constructor(props) {
         super(props);
-        this.error = props.error;
+        this.error = props.error || "DefaultError";
     }
 
     render() {
@@ -19,36 +19,6 @@ export default class ErrorPage extends Component {
                 </div>
             </div>
         );
-    }
-}
-
-class DefaultError extends Component {
-    render() {
-        return (
-            <>
-                <h2>Unknown error!</h2>
-            </>
-        )
-    }
-}
-
-class NotFound extends Component {
-    render() {
-        return (
-            <>
-                <h2>Page not found!</h2>
-            </>
-        )
-    }
-}
-
-class AuthError extends Component {
-    render() {
-        return (
-            <>
-                <h2>User is not admin!</h2>
-            </>
-        )
     }
 }
 
@@ -78,7 +48,7 @@ class ErrorElement extends Component {
                 message: "Something went wrong. Please try again."
             },
         ];
-        this.error = errorMessages.find(e => e.error == props.error);
+        this.error = errorMessages.find(e => e.error === props.error);
     }
 
     render() {

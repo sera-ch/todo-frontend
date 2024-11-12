@@ -1,6 +1,7 @@
 import { Component } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import Loading from "./Loading.jsx";
 
 class Login extends Component {
     constructor(props) {
@@ -9,7 +10,12 @@ class Login extends Component {
             username: '',
             password: '',
             buttonDisabled: false,
-            navigation: props.navigation,
+            from: props.from,
+            token: window.sessionStorage.getItem("token"),
+        }
+        this.navigation = props.navigation;
+        if(this.state.token != null && this.token !== "") {
+            this.navigation("/");
         }
     }
 
@@ -29,10 +35,11 @@ class Login extends Component {
            }).then((response) => {
             window.sessionStorage.setItem("token", response.data.token);
             window.sessionStorage.setItem("role", response.data.role);
+            window.sessionStorage.setItem("username", response.data.username);
             this.setState({
                 buttonDisabled: false,
             });
-            this.state.navigation("/");
+            this.navigation(this.state.from || "/");
            }).catch((error) => {
             console.error(error);
             this.setState({
@@ -55,42 +62,38 @@ class Login extends Component {
 
     render() {
         if (this.state.buttonDisabled) {
-            return "Logging in...";
+            return <Loading text={"Logging in..."}/>
         }
 
         return(
-            <>
-                <div className="row p-5">
-                    <div className="col-4 d-none d-md-block">
-                    </div>
-                    <div className="col-12 col-md-4">
-                        <>
-                            <div className="login-form-container">
-                                <div className="row">
-                                    LOGIN
-                                </div>
-                                <form className="form-control login-form">
-                                    <div className="row">
-                                        <label htmlFor="username-input" className="col-4">Username:</label>
-                                        <input type="text" id="username-input" className="username-input col-7" required onChange={event => this.handleUsernameChange(event)}></input>
-                                    </div>
-                                    <div className="row">
-                                        <label htmlFor="password-input" className="col-4">Password:</label>
-                                        <input type="password" id="password-input" className="password-input col-7" required onChange={event => this.handlePasswordChange(event)}></input>
-                                    </div>
-                                    <div className="login-button-container">
-                                        <button className="btn login-button" disabled={this.state.buttonDisabled} onClick={event => this.onButtonClick(event)}>
-                                            Login
-                                        </button>
-                                    </div>
-                                </form>
+            <div className="row p-5">
+                <div className="col-4 d-none d-md-block">
+                </div>
+                <div className="col-12 col-md-4">
+                    <div className="login-form-container">
+                        <div className="row">
+                            LOGIN
+                        </div>
+                        <form className="form-control login-form">
+                            <div className="row">
+                                <label htmlFor="username-input" className="col-4">Username:</label>
+                                <input type="text" id="username-input" className="username-input col-7" required onChange={event => this.handleUsernameChange(event)}></input>
                             </div>
-                        </>
-                    </div>
-                    <div className="col-4 d-none d-md-block">
+                            <div className="row">
+                                <label htmlFor="password-input" className="col-4">Password:</label>
+                                <input type="password" id="password-input" className="password-input col-7" required onChange={event => this.handlePasswordChange(event)}></input>
+                            </div>
+                            <div className="login-button-container">
+                                <button className="btn login-button" disabled={this.state.buttonDisabled} onClick={event => this.onButtonClick(event)}>
+                                    Login
+                                </button>
+                            </div>
+                        </form>
                     </div>
                 </div>
-            </>
+                <div className="col-4 d-none d-md-block">
+                </div>
+            </div>
         );
     }
 

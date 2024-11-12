@@ -1,7 +1,6 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import 'bootstrap/dist/css/bootstrap.css'
-import $ from 'jquery'
 import './App.css'
 import Login from './components/Login.jsx';
 import ListChecklists from './components/ListChecklists.jsx';
@@ -18,28 +17,24 @@ const router = createBrowserRouter([
     path: "/login",
     element: <div><Login /></div>,
     errorElement: <div><ErrorPage error="DefaultError" /></div>,
-    title: "Login",
   },
   {
     path: "/",
     element: <div><ListChecklists /></div>,
     errorElement: <div><ErrorPage error="DefaultError" /></div>,
-    title: "Home"
   },
   {
     path: "/error",
-    title: "Error",
+    element: <div><ErrorPage error="DefaultError" /></div>,
   },
   {
     path: "/admin",
     element: <div><Dashboard /></div>,
     errorElement: <div><ErrorPage error="DefaultError" /></div>,
-    title: "Dashboard",
   },
   {
     path: "/*",
     element: <div><ErrorPage error="NotFound" /></div>,
-    title: "Not Found",
   },
 ]);
 
