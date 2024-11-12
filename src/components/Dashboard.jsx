@@ -43,10 +43,11 @@ class Dashboard extends Component {
         if (this.role !== "ADMIN") {
             this.navigation("/error", { error: "AuthError" });
         }
-        const checklistsApiUrl = "https://sick-sibby-sera-ch-dc6b17e3.koyeb.app/api/checklists";
-        const categoriesUrl = "https://sick-sibby-sera-ch-dc6b17e3.koyeb.app/api/tasks/categories";
-        const checklistCategoriesUrl = "https://sick-sibby-sera-ch-dc6b17e3.koyeb.app/api/checklists/categories";
-        const usersUrl = "https://sick-sibby-sera-ch-dc6b17e3.koyeb.app/api/users";
+        const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
+        const checklistsApiUrl = apiBaseUrl + "checklists";
+        const categoriesUrl = apiBaseUrl + "tasks/categories";
+        const checklistCategoriesUrl = apiBaseUrl + "checklists/categories";
+        const usersUrl = apiBaseUrl + "users";
         this.setState({ loading: true });
         await axios.get(checklistsApiUrl)
             .then((response) => {
@@ -79,7 +80,7 @@ class Dashboard extends Component {
 
     handleDelete = async(event, checklist) => {
         event.preventDefault();
-        const deleteChecklistApi = "https://sick-sibby-sera-ch-dc6b17e3.koyeb.app/api/checklists/" + checklist.id;
+        const deleteChecklistApi = import.meta.env.VITE_API_BASE_URL +  "checklists/" + checklist.id;
         this.setState({
             inputDisabled: true,
             showDeleteModal: false,
@@ -141,7 +142,7 @@ class Dashboard extends Component {
         this.setState({
             inputDisabled: true,
         });
-        const apiUrl = "https://sick-sibby-sera-ch-dc6b17e3.koyeb.app/api/checklists/create";
+        const apiUrl = import.meta.env.VITE_API_BASE_URL +  "checklists/create";
         await axios.post(apiUrl,
             JSON.stringify(addChecklistRequest),
             {
@@ -383,7 +384,7 @@ class TaskList extends Component {
 
     handleDelete = async(event, task) => {
         event.preventDefault();
-        const deleteChecklistApi = "https://sick-sibby-sera-ch-dc6b17e3.koyeb.app/api/tasks/" + task.id;
+        const deleteChecklistApi = import.meta.env.VITE_API_BASE_URL +  "tasks/" + task.id;
         this.setState({
             inputDisabled: true,
             showDeleteModal: false,
@@ -505,7 +506,7 @@ class AddTask extends Component {
         this.setState({
             inputDisabled: true,
         });
-        const apiUrl = "https://sick-sibby-sera-ch-dc6b17e3.koyeb.app/api/tasks/create";
+        const apiUrl = import.meta.env.VITE_API_BASE_URL +  "tasks/create";
         await axios.post(apiUrl,
             JSON.stringify(addTaskRequest),
             {

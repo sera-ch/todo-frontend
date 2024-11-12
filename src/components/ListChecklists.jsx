@@ -20,7 +20,7 @@ class ListChecklists extends Component {
         if (this.token == null) {
             this.navigation("/login");
         }
-        const apiUrl = "https://sick-sibby-sera-ch-dc6b17e3.koyeb.app/api/checklists";
+        const apiUrl = import.meta.env.VITE_API_BASE_URL + "checklists";
         this.setState({ loading: true });
         axios.get(apiUrl)
          .then((response) => {

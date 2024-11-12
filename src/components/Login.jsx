@@ -21,7 +21,7 @@ class Login extends Component {
 
     onButtonClick = async(event) => {
         event.preventDefault();
-        const apiUrl = "https://sick-sibby-sera-ch-dc6b17e3.koyeb.app/api/users/login"
+        const apiUrl = import.meta.env.VITE_API_BASE_URL +  "users/login"
         this.setState({
             buttonDisabled: true,
         });
