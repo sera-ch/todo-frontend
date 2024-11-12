@@ -1,6 +1,6 @@
 import { Component } from 'react';
 
-export default class ManageChecklists extends Component {
+export default class ManageUsers extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -12,10 +12,8 @@ export default class ManageChecklists extends Component {
     render() {
         return (
             <>
-                <div className="row">
-                    <div className="title">
-                        <h1>Manage checklists</h1>
-                    </div>
+                <div className={"manage-users col-10"}>
+                    "Manage users"
                 </div>
             </>
         )

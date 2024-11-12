@@ -8,6 +8,10 @@ body {
     color: white;
 }
 
+a {
+    text-decoration: none;
+}
+
 .login-form {
     background-color: #191919;
     color: white;
@@ -118,23 +122,6 @@ body {
     border: none;
 }
 
-.save-button-container {
-    text-align: center;
-}
-
-.save-button {
-    background-color: #191919;
-    color: #1b9a3f;
-    border: 2px solid #1b9a3f;
-    border-radius: 10px;
-    padding: 2px 7px 2px 7px;
-}
-
-.save-button:hover {
-    background-color: #1b9a3f;
-    color: #191919;
-}
-
 .checklist-name {
     width: 100%;
 }
@@ -171,16 +158,46 @@ body {
     left: -3px;
 }
 
-.modal-content {
-    background-color: #111111;
-}
-
-.modal-header,
-.modal-body,
-.modal-footer {
-    border: none;
-}
-
 .task-name.checked {
     color: #1b9a3f;
+}
+
+.error-element {
+    border-radius: 32px;
+    background-color: #191919;
+    padding: 50px;
+}
+
+.error-image {
+    width: 35%;
+}
+
+.error-element h4 {
+    font-weight: lighter;
+}
+
+.sidebar {
+    background-color: #323234;
+    position: absolute;
+    height: 100%;
+}
+
+.manage-checklists,
+.manage-users {
+    padding: 20px;
+}
+
+.sidebar i {
+    font-size: 150%;
+    color: #757577;
+}
+
+.sidebar-option,
+.sidebar-title {
+    color: white;
+    padding: 10px 20px 10px 20px;
+}
+
+.sidebar-option:hover {
+    background-color: #0a0a0a;
 }

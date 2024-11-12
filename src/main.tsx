@@ -17,11 +17,13 @@ const router = createBrowserRouter([
   {
     path: "/login",
     element: <div><Login /></div>,
+    errorElement: <div><ErrorPage error="DefaultError" /></div>,
     title: "Login",
   },
   {
     path: "/",
     element: <div><ListChecklists /></div>,
+    errorElement: <div><ErrorPage error="DefaultError" /></div>,
     title: "Home"
   },
   {
@@ -31,6 +33,7 @@ const router = createBrowserRouter([
   {
     path: "/admin",
     element: <div><Dashboard /></div>,
+    errorElement: <div><ErrorPage error="DefaultError" /></div>,
     title: "Dashboard",
   },
   {

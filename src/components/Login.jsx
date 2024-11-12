@@ -1,73 +1,102 @@
-import { useState } from 'react';
+import { Component } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
-const Login = () => {
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
-    const [buttonDisabled, setButtonDisabled] = useState(false);
-    const navigate = useNavigate();
+class Login extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            username: '',
+            password: '',
+            buttonDisabled: false,
+            navigation: props.navigation,
+        }
+    }
 
-    const onButtonClick = async(event) => {
+    onButtonClick = async(event) => {
         event.preventDefault();
         const apiUrl = "https://sick-sibby-sera-ch-dc6b17e3.koyeb.app/api/users/login"
-        setButtonDisabled(true);
+        this.setState({
+            buttonDisabled: true,
+        });
         await axios.post(apiUrl,
            JSON.stringify({
-               username: username,
-               password: password
+               username: this.state.username,
+               password: this.state.password,
            }),
            {
             headers: { 'Content-Type' : 'application/json' }
            }).then((response) => {
             window.sessionStorage.setItem("token", response.data.token);
             window.sessionStorage.setItem("role", response.data.role);
-            setButtonDisabled(false);
-            navigate("/");
+            this.setState({
+                buttonDisabled: false,
+            });
+            this.state.navigation("/");
            }).catch((error) => {
             console.error(error);
-            setButtonDisabled(false);
+            this.setState({
+                buttonDisabled: false,
+            });
            });
     }
 
-    if (buttonDisabled) {
-        return "Logging in...";
+    handleUsernameChange = (event) => {
+        this.setState({
+            username: event.target.value
+        });
     }
 
-    return(
-        <>
-            <div className="row p-5">
-                <div className="col-4 d-none d-md-block">
-                </div>
-                <div className="col-12 col-md-4">
-                    <>
-                        <div className="login-form-container">
-                            <div className="row">
-                                LOGIN
+    handlePasswordChange = (event) => {
+        this.setState({
+            password: event.target.value
+        });
+    }
+
+    render() {
+        if (this.state.buttonDisabled) {
+            return "Logging in...";
+        }
+
+        return(
+            <>
+                <div className="row p-5">
+                    <div className="col-4 d-none d-md-block">
+                    </div>
+                    <div className="col-12 col-md-4">
+                        <>
+                            <div className="login-form-container">
+                                <div className="row">
+                                    LOGIN
+                                </div>
+                                <form className="form-control login-form">
+                                    <div className="row">
+                                        <label htmlFor="username-input" className="col-4">Username:</label>
+                                        <input type="text" id="username-input" className="username-input col-7" required onChange={event => this.handleUsernameChange(event)}></input>
+                                    </div>
+                                    <div className="row">
+                                        <label htmlFor="password-input" className="col-4">Password:</label>
+                                        <input type="password" id="password-input" className="password-input col-7" required onChange={event => this.handlePasswordChange(event)}></input>
+                                    </div>
+                                    <div className="login-button-container">
+                                        <button className="btn login-button" disabled={this.state.buttonDisabled} onClick={event => this.onButtonClick(event)}>
+                                            Login
+                                        </button>
+                                    </div>
+                                </form>
                             </div>
-                            <form className="form-control login-form">
-                                <div className="row">
-                                    <label htmlFor="username-input" className="col-4">Username:</label>
-                                    <input type="text" id="username-input" className="username-input col-7" required onChange={event => setUsername(event.target.value)}></input>
-                                </div>
-                                <div className="row">
-                                    <label htmlFor="password-input" className="col-4">Password:</label>
-                                    <input type="password" id="password-input" className="password-input col-7" required onChange={event => setPassword(event.target.value)}></input>
-                                </div>
-                                <div className="login-button-container">
-                                    <button className="btn login-button" disabled={buttonDisabled} onClick={event => onButtonClick(event)}>
-                                        Login
-                                    </button>
-                                </div>
-                            </form>
-                        </div>
-                    </>
+                        </>
+                    </div>
+                    <div className="col-4 d-none d-md-block">
+                    </div>
                 </div>
-                <div className="col-4 d-none d-md-block">
-                </div>
-            </div>
-        </>
-    );
+            </>
+        );
+    }
+
 }
 
-export default Login;
+export default function(props) {
+    const navigation = useNavigate();
+    return <Login navigation={navigation} />;
+}
