@@ -44,12 +44,12 @@ class ListChecklists extends Component {
         }
         return (
             <div className="row p-5">
-                <div className="col-4 d-none d-md-block">
+                <div className="col-4 d-none d-xxl-block">
                 </div>
-                <div className="col-12 col-md-4">
+                <div className="col-12 col-xxl-4">
                     <Checklists data={this.state.data} dataReceived={this.state.dataReceived} />
                 </div>
-                <div className="col-4 d-none d-md-block">
+                <div className="col-4 d-none d-xxl-block">
                 </div>
             </div>
         );
