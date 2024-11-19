@@ -24,6 +24,8 @@ class Dashboard extends Component {
             navigation: props.navigation,
             showDeleteModal: false,
             selectedChecklist: null,
+            newChecklistName: "",
+            newCategory: "",
         };
         this.token = window.sessionStorage.getItem("token");
         this.role = window.sessionStorage.getItem("role");
@@ -43,10 +45,11 @@ class Dashboard extends Component {
         if (this.role !== "ADMIN") {
             this.navigation("/error", { error: "AuthError" });
         }
-        const checklistsApiUrl = "https://sick-sibby-sera-ch-dc6b17e3.koyeb.app/api/checklists";
-        const categoriesUrl = "https://sick-sibby-sera-ch-dc6b17e3.koyeb.app/api/tasks/categories";
-        const checklistCategoriesUrl = "https://sick-sibby-sera-ch-dc6b17e3.koyeb.app/api/checklists/categories";
-        const usersUrl = "https://sick-sibby-sera-ch-dc6b17e3.koyeb.app/api/users";
+        const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
+        const checklistsApiUrl = apiBaseUrl + "checklists";
+        const categoriesUrl = apiBaseUrl + "tasks/categories";
+        const checklistCategoriesUrl = apiBaseUrl + "checklists/categories";
+        const usersUrl = apiBaseUrl + "users";
         this.setState({ loading: true });
         await axios.get(checklistsApiUrl)
             .then((response) => {
@@ -79,7 +82,7 @@ class Dashboard extends Component {
 
     handleDelete = async(event, checklist) => {
         event.preventDefault();
-        const deleteChecklistApi = "https://sick-sibby-sera-ch-dc6b17e3.koyeb.app/api/checklists/" + checklist.id;
+        const deleteChecklistApi = import.meta.env.VITE_API_BASE_URL +  "checklists/" + checklist.id;
         this.setState({
             inputDisabled: true,
             showDeleteModal: false,
@@ -108,10 +111,41 @@ class Dashboard extends Component {
             });
     }
 
-    handleEdit = (event, checklistId) => {
+    handleEdit = async(event, checklist) => {
         event.preventDefault();
-        // TODO Implementation
-        console.log("Checklist " + checklistId + " requested for edit");
+        const editChecklistApi = import.meta.env.VITE_API_BASE_URL + "checklists/" + checklist.id;
+        if (checklist.name === this.state.newChecklistName && checklist.category === this.state.newCategory) {
+            return;
+        }
+        this.setState({
+            inputDisabled: true,
+            showEditModal: false,
+        });
+        let requestBody = {
+            checklist_id: checklist.id,
+            name: this.state.newChecklistName,
+            category: this.state.newCategory,
+        }
+        await axios.put(editChecklistApi,
+            requestBody,
+            {
+                headers: { 'Content-Type' : 'application/json',
+                    'token': window.sessionStorage.getItem('token')}
+            })
+            .then((response) => {
+                let {checklists} = this.state;
+                let updatedIndex = checklists.findIndex(cl => cl.id === checklist.id);
+                this.setState({checklists: checklists.slice(0, updatedIndex).concat(response.data).concat(checklists.slice(updatedIndex + 1))});
+                this.setState({
+                    inputDisabled: false,
+                });
+            })
+            .catch((error) => {
+                console.error(error);
+                this.setState({
+                    inputDisabled: false,
+                });
+            });
     }
 
     handleChecklistNameChange = (event) => {
@@ -141,7 +175,7 @@ class Dashboard extends Component {
         this.setState({
             inputDisabled: true,
         });
-        const apiUrl = "https://sick-sibby-sera-ch-dc6b17e3.koyeb.app/api/checklists/create";
+        const apiUrl = import.meta.env.VITE_API_BASE_URL +  "checklists/create";
         await axios.post(apiUrl,
             JSON.stringify(addChecklistRequest),
             {
@@ -165,6 +199,7 @@ class Dashboard extends Component {
     handleClose = () => {
         this.setState({
             showDeleteModal: false,
+            showEditModal: false,
         });
     }
 
@@ -176,6 +211,19 @@ class Dashboard extends Component {
         this.setState({
             selectedChecklist: checklist,
             showDeleteModal: true,
+        });
+    }
+
+    showEditModal = (event, checklist) => {
+        event.preventDefault();
+        if(this.state.inputDisabled) {
+            return;
+        }
+        this.setState({
+            selectedChecklist: checklist,
+            showEditModal: true,
+            newChecklistName: checklist.name,
+            newCategory: checklist.category,
         });
     }
 
@@ -196,6 +244,33 @@ class Dashboard extends Component {
                         <Modal.Footer className={"edit-modal"}>
                             <Button variant="primary" onClick={this.handleClose}>No</Button>
                             <Button variant="secondary" onClick={(event) => this.handleDelete(event, this.state.selectedChecklist)}>Yes</Button>
+                        </Modal.Footer>
+                    </Modal>
+                    <Modal backdropClassName={"edit-modal-bg"} show={this.state.showEditModal} onHide={this.handleClose} centered>
+                        <Modal.Header className={"edit-modal"} closeButton>
+                            <Modal.Title>Edit checklist</Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body className={"edit-modal row"}>
+                            <div className={"col-8"}>
+                                <input type={"text"} className={"edit-checklist-input"} id={"edit-checklist-name"} defaultValue={this.state.selectedChecklist ? this.state.selectedChecklist.name : ""}
+                                       onChange={(event) => this.setState({newChecklistName: event.target.value})}/>
+                            </div>
+                            <div className={"col-4"}>
+                                <select name={"categories"} disabled={this.state.inputDisabled} defaultValue={this.state.selectedChecklist? this.state.selectedChecklist.category : "none"}
+                                        onChange={(event) => this.setState({newCategory: event.target.value})}>
+                                    {
+                                        this.state.checklistCategories.map((category) => (
+                                            <option key={category + "-edit-" + this.state.checklist_id}
+                                                    value={category}>{category}</option>
+                                        ))
+                                    }
+                                </select>
+                            </div>
+                        </Modal.Body>
+                        <Modal.Footer className={"edit-modal"}>
+                            <Button variant="primary"
+                                    onClick={(event) => this.handleEdit(event, this.state.selectedChecklist)}>Save</Button>
+                            <Button variant="secondary" onClick={this.handleClose}>Cancel</Button>
                         </Modal.Footer>
                     </Modal>
                     <div className="row">
@@ -221,11 +296,11 @@ class Dashboard extends Component {
                                             <div className={"col-8"}>{checklist.name}</div>
                                             <div className={"col-2 checklist-category"}><span className={"checklist-category-label label-" + checklist.category.toLowerCase()}>{checklist.category}</span></div>
                                             <div className={"col-1"}>
-                                                <a href={""} className={"edit-link"} onClick={(event) => this.handleEdit(event, checklist.id)}>
-                                                    <i className="bi bi-pencil-fill"></i>
+                                                <a href={""} className={"edit-link"} onClick={(event) => this.showEditModal(event, checklist)}>
+                                                    <i className={"bi bi-pencil-fill " + (this.state.inputDisabled ? "disabled" : "")}></i>
                                                 </a>
                                                 <a href={""} className={"edit-link"} onClick={(event) => this.showDeleteModal(event, checklist)}>
-                                                    <i className="bi bi-x-lg"></i>
+                                                    <i className={"bi bi-x-lg " + (this.state.inputDisabled ? "disabled" : "")}></i>
                                                 </a>
                                             </div>
                                         </div>
@@ -352,8 +427,11 @@ class TaskList extends Component {
             tasks: props.checklist.tasks,
             categories: props.categories,
             showDeleteModal: false,
+            showEditModal: false,
             selectedTask: null,
             inputDisabled: false,
+            newTaskName: "",
+            newCategory: "",
         };
     }
 
@@ -368,9 +446,23 @@ class TaskList extends Component {
         })
     }
 
+    showEditModal = (event, task) => {
+        event.preventDefault();
+        if(this.state.inputDisabled) {
+            return;
+        }
+        this.setState({
+            showEditModal: true,
+            selectedTask: task,
+            newCategory: task.category,
+            newTaskName: task.name,
+        });
+    }
+
     handleClose = () => {
         this.setState({
             showDeleteModal: false,
+            showEditModal: false,
         })
     }
 
@@ -383,7 +475,7 @@ class TaskList extends Component {
 
     handleDelete = async(event, task) => {
         event.preventDefault();
-        const deleteChecklistApi = "https://sick-sibby-sera-ch-dc6b17e3.koyeb.app/api/tasks/" + task.id;
+        const deleteChecklistApi = import.meta.env.VITE_API_BASE_URL +  "tasks/" + task.id;
         this.setState({
             inputDisabled: true,
             showDeleteModal: false,
@@ -412,10 +504,41 @@ class TaskList extends Component {
             });
     }
 
-    handleEdit = (event, taskId) => {
+    handleEdit = async(event, task) => {
         event.preventDefault();
-        // TODO Implementation
-        console.log("Task " + taskId + " requested for edit");
+        const editTaskApi = import.meta.env.VITE_API_BASE_URL + "tasks/" + task.id;
+        if (task.name === this.state.newTaskName && task.category === this.state.newCategory) {
+            return;
+        }
+        this.setState({
+            inputDisabled: true,
+            showEditModal: false,
+        });
+        let requestBody = {
+            task_id: task.id,
+            name: this.state.newTaskName,
+            category: this.state.newCategory,
+        }
+        await axios.put(editTaskApi,
+            requestBody,
+            {
+                headers: { 'Content-Type' : 'application/json',
+                    'token': window.sessionStorage.getItem('token')}
+            })
+            .then((response) => {
+                let {tasks} = this.state;
+                let updatedIndex = tasks.findIndex(t => t.id === task.id);
+                this.setState({tasks: tasks.slice(0, updatedIndex).concat(response.data).concat(tasks.slice(updatedIndex + 1))});
+                this.setState({
+                    inputDisabled: false,
+                });
+            })
+            .catch((error) => {
+                console.error(error);
+                this.setState({
+                    inputDisabled: false,
+                });
+            });
     }
 
     render() {
@@ -433,7 +556,35 @@ class TaskList extends Component {
                         <Button variant="secondary" onClick={(event) => this.handleDelete(event, this.state.selectedTask)}>Yes</Button>
                     </Modal.Footer>
                 </Modal>
-                <div className={"row task-table accordion-collapse collapse"} id={"task-table-" + this.state.checklist.id}>
+                <Modal backdropClassName={"edit-modal-bg"} show={this.state.showEditModal} onHide={this.handleClose} centered>
+                    <Modal.Header className={"edit-modal"} closeButton>
+                        <Modal.Title>Edit task</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body className={"edit-modal row"}>
+                        <div className={"col-8"}>
+                            <input type={"text"} className={"edit-task-input"} id={"edit-task-name"} defaultValue={this.state.selectedTask ? this.state.selectedTask.name : ""}
+                                   onChange={(event) => this.setState({newTaskName: event.target.value})}/>
+                        </div>
+                        <div className={"col-4"}>
+                            <select name={"categories"} disabled={this.state.inputDisabled} defaultValue={this.state.selectedTask? this.state.selectedTask.category : "none"}
+                                    onChange={(event) => this.setState({newCategory: event.target.value})}>
+                                {
+                                    this.state.categories.map((category) => (
+                                        <option key={category + "-edit-" + this.state.checklist_id}
+                                                value={category}>{category}</option>
+                                    ))
+                                }
+                            </select>
+                        </div>
+                    </Modal.Body>
+                    <Modal.Footer className={"edit-modal"}>
+                        <Button variant="primary"
+                                onClick={(event) => this.handleEdit(event, this.state.selectedTask)}>Save</Button>
+                        <Button variant="secondary" onClick={this.handleClose}>Cancel</Button>
+                    </Modal.Footer>
+                </Modal>
+                <div className={"row task-table accordion-collapse collapse"}
+                     id={"task-table-" + this.state.checklist.id}>
                     {
                         this.state.tasks.map((task) => (
                             <div className={"row tasklist-item"} key={"admin-task-" + task.id}>
@@ -447,11 +598,11 @@ class TaskList extends Component {
                                     <span className={"task-category-label label-" + task.category.toLowerCase()}>{task.category}</span>
                                 </div>
                                 <div className={"col-1 action"}>
-                                    <a href={""} className={"edit-link"} onClick={(event) => this.handleEdit(event, task.id)}>
-                                        <i className="bi bi-pencil-fill"></i>
+                                    <a href={""} className={"edit-link"} onClick={(event) => this.showEditModal(event, task)}>
+                                        <i className={"bi bi-pencil-fill " + (this.state.inputDisabled ? "disabled" : "")}></i>
                                     </a>
                                     <a href={""} className={"edit-link"} onClick={(event) => this.showDeleteModal(event, task)}>
-                                        <i className="bi bi-x-lg"></i>
+                                        <i className={"bi bi-x-lg " + (this.state.inputDisabled ? "disabled" : "")}></i>
                                     </a>
                                 </div>
                             </div>
@@ -505,7 +656,7 @@ class AddTask extends Component {
         this.setState({
             inputDisabled: true,
         });
-        const apiUrl = "https://sick-sibby-sera-ch-dc6b17e3.koyeb.app/api/tasks/create";
+        const apiUrl = import.meta.env.VITE_API_BASE_URL +  "tasks/create";
         await axios.post(apiUrl,
             JSON.stringify(addTaskRequest),
             {

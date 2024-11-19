@@ -10,12 +10,12 @@ export default class ErrorPage extends Component {
     render() {
         return (
             <div className="row p-5">
-                <div className="col-4 d-none d-md-block">
+                <div className="col-4 d-none d-xxl-block">
                 </div>
-                <div className="col-12 col-md-4 error-element">
+                <div className="col-12 col-xxl-4 error-element">
                     <ErrorElement error={this.error} />
                 </div>
-                <div className="col-4 d-none d-md-block">
+                <div className="col-4 d-none d-xxl-block">
                 </div>
             </div>
         );
