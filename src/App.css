@@ -277,7 +277,9 @@ button.btn:hover{
 }
 
 .add-new-task-input,
-.add-new-checklist-input {
+.edit-task-input,
+.add-new-checklist-input,
+.edit-checklist-input {
     width: 100%;
 }
 
@@ -358,4 +360,8 @@ button.btn:hover{
 .admin-icon i{
     font-size: 200%;
     color: white;
+}
+
+i.disabled {
+    color: #a1a1a1;
 }

@@ -70,7 +70,7 @@ class TaskList extends Component {
     handleChange = async(target, task) => {
         task.checked = !task.checked;
         target.checked = task.checked;
-        const apiUrl = "https://sick-sibby-sera-ch-dc6b17e3.koyeb.app/api/tasks/" + task.id + "/update-status";
+        const apiUrl = import.meta.env.VITE_API_BASE_URL +  "tasks/" + task.id + "/update-status";
         const request = { completed: task.checked };
         this.setState({ checkboxesDisabled: true });
         await axios.put(apiUrl, JSON.stringify(request),
