@@ -1,5 +1,6 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
+import React from "react";
 import 'bootstrap/dist/css/bootstrap.css'
 import './App.css'
 import Login from './components/Login.jsx';
