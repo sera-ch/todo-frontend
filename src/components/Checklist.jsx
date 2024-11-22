@@ -10,6 +10,7 @@ export default class Checklist extends Component {
             completedPercent: props.data.completed_percent,
             tasks: props.data.tasks,
             checklist: props.data,
+            sendChecklistsUpdate: props.sendChecklistsUpdate,
         };
     }
 
@@ -17,23 +18,62 @@ export default class Checklist extends Component {
         this.setState({ completedPercent: value });
     }
 
+    favoriteChecklist = async(event, checklist) => {
+        event.preventDefault();
+        const editChecklistApi = import.meta.env.VITE_API_BASE_URL + "checklists/" + checklist.id + "/favorite";
+        this.setState({
+            inputDisabled: true
+        });
+        let requestBody = {
+            is_favorite: !checklist.is_favorite,
+        };
+        await axios.put(editChecklistApi,
+            requestBody,
+            {
+                headers: { 'Content-Type' : 'application/json' }
+            })
+            .then((response) => {
+                this.setState({
+                    checklist: response.data,
+                    inputDisabled: false,
+                });
+                this.state.sendChecklistsUpdate(checklist);
+            })
+            .catch((error) => {
+                console.error(error);
+                this.setState({
+                    inputDisabled: false,
+                });
+            });
+    }
+
     render() {
         return (
             <div className="accordion" id={"checklist-accordion-" + this.state.checklist.id}>
                 <div className="accordion-item no-border collapse-item">
                     <div className="accordion-header" id={"checklist-" + this.state.checklist.id}>
-                        <h6>
-                            <button className="btn btn-link accordion-button" type="button" data-bs-toggle="collapse" data-bs-target={"#checklist-card-" + this.state.checklist.id} aria-expanded="true" aria-controls={"checklist-card-" + this.state.checklist.id}>
-                                <span className="checklist-name">{this.state.checklist.name}</span>
-                                <div className="checklist-status">
-                                    <span className={"checklist-status-label " + (this.state.completedPercent == 100 ? "completed" : "in-progress")} id={"checklist-status-label-" + this.state.checklist.id}>
-                                        {this.state.completedPercent == 100 ? <i className="bi bi-check"></i> : <span></span>}
+                        <h6 style={{display: "inline-flex"}} className={"col-12"}>
+                            <a href={""} className={"favorite-button col-1"}
+                               onClick={(event) => this.favoriteChecklist(event, this.state.checklist)}>
+                                <i className={this.state.checklist.is_favorite ? "bi bi-star-fill" : "bi bi-star"}></i>
+                            </a>
+                            <button className="btn btn-link accordion-button col-11 row" type="button"
+                                    data-bs-toggle="collapse"
+                                    data-bs-target={"#checklist-card-" + this.state.checklist.id} aria-expanded="true"
+                                    aria-controls={"checklist-card-" + this.state.checklist.id}>
+                                <div className="checklist-name col-8">{this.state.checklist.name}</div>
+                                <div className="checklist-status col-2">
+                                    <span
+                                        className={"checklist-status-label " + (this.state.completedPercent == 100 ? "completed" : "in-progress")}
+                                        id={"checklist-status-label-" + this.state.checklist.id}>
+                                        {this.state.completedPercent == 100 ? <i className="bi bi-check"></i> :
+                                            <span></span>}
                                     </span>
                                 </div>
                             </button>
                         </h6>
                         <div>
-                            <span className = "completed-percent ps-4">
+                            <span className="completed-percent ps-4">
                                 {this.state.completedPercent + "% completed"}
                             </span>
                         </div>

@@ -16,6 +16,16 @@ class ListChecklists extends Component {
         this.navigation = props.navigation;
     }
 
+    compareChecklists = (a, b) => {
+        if (a.is_favorite && !b.is_favorite) {
+            return 1;
+        }
+        if (!a.is_favorite && b.is_favorite) {
+            return -1;
+        }
+        return 0;
+    }
+
     componentDidMount() {
         if (this.token == null) {
             this.navigation("/login");
@@ -65,13 +75,19 @@ class Checklists extends Component {
         }
     }
 
+    updateChecklists = (checklist) => {
+        let {checklists} = this.state;
+        let updatedIndex = checklists.findIndex(cl => cl.id === checklist.id);
+        this.setState({checklists: checklists.slice(0, updatedIndex).concat(checklist).concat(checklists.slice(updatedIndex + 1))});
+    }
+
     render() {
         if (!this.state.dataReceived) {
             return <Loading text={"Loading..."}/>
         }
         return this.state.data.checklists.map((checklist) => (
             <div key = {"checklist-" + checklist.id}>
-                <Checklist data={checklist} />
+                <Checklist data={checklist} sendChecklistsUpdate={(checklist) => this.updateChecklists(checklist)} />
             </div>
         ));
     }
